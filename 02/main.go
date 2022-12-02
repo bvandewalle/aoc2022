@@ -49,8 +49,6 @@ func part2(input []string) {
 
 		count += b * 3
 		count += points[a][b]
-		fmt.Println(count)
-
 	}
 
 	fmt.Println(count)
