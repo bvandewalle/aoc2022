@@ -46,7 +46,7 @@ func part2(input []string) {
 		b := 2 - int('Z'-iv[2])
 
 		count += b * 3
-		count += 1 + ((a + b + +2) % 3)
+		count += 1 + ((a + b + 2) % 3)
 	}
 
 	fmt.Println(count)
