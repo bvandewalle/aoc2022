@@ -26,7 +26,7 @@ func main() {
 
 func part1(input []string) {
 	count := 0
-	points := [][]int{[]int{3, 6, 0}, []int{0, 3, 6}, []int{6, 0, 3}}
+	points := [][]int{{3, 6, 0}, {0, 3, 6}, {6, 0, 3}}
 
 	for _, iv := range input {
 		a := 2 - int('C'-iv[0])
@@ -41,7 +41,7 @@ func part1(input []string) {
 
 func part2(input []string) {
 	count := 0
-	points := [][]int{[]int{3, 1, 2}, []int{1, 2, 3}, []int{2, 3, 1}}
+	points := [][]int{{3, 1, 2}, {1, 2, 3}, {2, 3, 1}}
 
 	for _, iv := range input {
 		a := 2 - int('C'-iv[0])
