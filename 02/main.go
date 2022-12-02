@@ -26,37 +26,14 @@ func main() {
 
 func part1(input []string) {
 	count := 0
+	points := [][]int{[]int{3, 6, 0}, []int{0, 3, 6}, []int{6, 0, 3}}
 
 	for _, iv := range input {
-		switch a := iv[0]; a {
-		case 'A':
-			switch b := iv[2]; b {
-			case 'X':
-				count += 3 + 1
-			case 'Y':
-				count += 6 + 2
-			case 'Z':
-				count += 0 + 3
-			}
-		case 'B':
-			switch b := iv[2]; b {
-			case 'X':
-				count += 0 + 1
-			case 'Y':
-				count += 3 + 2
-			case 'Z':
-				count += 6 + 3
-			}
-		case 'C':
-			switch b := iv[2]; b {
-			case 'X':
-				count += 6 + 1
-			case 'Y':
-				count += 0 + 2
-			case 'Z':
-				count += 3 + 3
-			}
-		}
+		a := 2 - int('C'-iv[0])
+		b := 2 - int('Z'-iv[2])
+
+		count += points[a][b]
+		count += b + 1
 	}
 
 	fmt.Println(count)
@@ -64,38 +41,16 @@ func part1(input []string) {
 
 func part2(input []string) {
 	count := 0
+	points := [][]int{[]int{3, 1, 2}, []int{1, 2, 3}, []int{2, 3, 1}}
 
 	for _, iv := range input {
-		switch a := iv[0]; a {
-		case 'A':
-			switch b := iv[2]; b {
-			case 'X':
-				count += 0 + 3
-			case 'Y':
-				count += 3 + 1
-			case 'Z':
-				count += 6 + 2
-			}
-		case 'B':
-			switch b := iv[2]; b {
-			case 'X':
-				count += 0 + 1
-			case 'Y':
-				count += 3 + 2
-			case 'Z':
-				count += 6 + 3
-			}
-		case 'C':
-			switch b := iv[2]; b {
-			case 'X':
-				count += 0 + 2
-			case 'Y':
-				count += 3 + 3
-			case 'Z':
-				count += 6 + 1
-			}
-		}
+		a := 2 - int('C'-iv[0])
+		b := 2 - int('Z'-iv[2])
+
+		count += b * 3
+		count += points[a][b]
 		fmt.Println(count)
+
 	}
 
 	fmt.Println(count)
