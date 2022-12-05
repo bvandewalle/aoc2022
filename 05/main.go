@@ -40,30 +40,34 @@ func parts(input []string, part2 bool) {
 			}
 		}
 
-		if strings.Contains(iv, "move") {
-			b := strings.Split(iv, " ")
-			m, _ := strconv.Atoi(b[1])
-			f, _ := strconv.Atoi(b[3])
-			t, _ := strconv.Atoi(b[5])
+		if !strings.Contains(iv, "move") {
+			continue
+		}
 
-			if !part2 {
-				for j := 0; j < m; j++ {
-					stacks[t-1] = append(stacks[t-1], stacks[f-1][len(stacks[f-1])-1])
-					stacks[f-1] = stacks[f-1][:len(stacks[f-1])-1]
-				}
-			} else {
-				for j := m; j > 0; j-- {
-					stacks[t-1] = append(stacks[t-1], stacks[f-1][len(stacks[f-1])-j])
-				}
-				stacks[f-1] = stacks[f-1][:len(stacks[f-1])-m]
+		b := strings.Split(iv, " ")
+		m, _ := strconv.Atoi(b[1])
+		f, _ := strconv.Atoi(b[3])
+		t, _ := strconv.Atoi(b[5])
+		f--
+		t--
+
+		if !part2 {
+			for j := 0; j < m; j++ {
+				stacks[t] = append(stacks[t], stacks[f][len(stacks[f])-1])
+				stacks[f] = stacks[f][:len(stacks[f])-1]
 			}
+		} else {
+			for j := m; j > 0; j-- {
+				stacks[t] = append(stacks[t], stacks[f][len(stacks[f])-j])
+			}
+			stacks[f] = stacks[f][:len(stacks[f])-m]
 		}
 	}
 
-	response := ""
+	result := ""
 	for k := 0; k < 9; k++ {
-		response += string(stacks[k][len(stacks[k])-1])
+		result += string(stacks[k][len(stacks[k])-1])
 	}
 
-	fmt.Println(response)
+	fmt.Println(result)
 }
