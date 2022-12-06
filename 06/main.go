@@ -20,11 +20,11 @@ func main() {
 		input = append(input, v)
 	}
 
-	parts(input, false)
-	parts(input, true)
+	partsOptimized(input, false)
+	partsOptimized(input, true)
 }
 
-func parts(input []string, part2 bool) {
+func partsBrute(input []string, part2 bool) {
 	limit := 4
 	if part2 {
 		limit = 14
@@ -33,7 +33,6 @@ func parts(input []string, part2 bool) {
 Exit:
 	for i, _ := range input[0] {
 		if i > limit-1 {
-
 			for j := 0; j < limit; j++ {
 				for k := 0; k < limit; k++ {
 					if j != k {
@@ -43,6 +42,31 @@ Exit:
 					}
 				}
 			}
+			fmt.Println(i + 1)
+			return
+		}
+	}
+}
+
+func partsOptimized(input []string, part2 bool) {
+	le := 4
+	if part2 {
+		le = 14
+	}
+
+	m := map[byte]int{}
+
+	for i, iv := range input[0] {
+		m[byte(iv)] += 1
+
+		if i > le-1 {
+			m[input[0][i-le]] -= 1
+			if v := m[input[0][i-le]]; v == 0 {
+				delete(m, input[0][i-le])
+			}
+		}
+
+		if len(m) == le {
 			fmt.Println(i + 1)
 			return
 		}
