@@ -20,33 +20,24 @@ func main() {
 		input = append(input, v)
 	}
 
-	part1(input)
-	part2(input)
+	parts(input, false)
+	parts(input, true)
 }
 
-func part1(input []string) {
+func parts(input []string, part2 bool) {
 	count := 0
 
 	for _, iv := range input {
 		a := 2 - int('C'-iv[0])
 		b := 2 - int('Z'-iv[2])
 
-		count += 3 * ((b - a + 4) % 3)
-		count += b + 1
-	}
-
-	fmt.Println(count)
-}
-
-func part2(input []string) {
-	count := 0
-
-	for _, iv := range input {
-		a := 2 - int('C'-iv[0])
-		b := 2 - int('Z'-iv[2])
-
-		count += b * 3
-		count += 1 + ((a + b + 2) % 3)
+		if !part2 {
+			count += 3 * ((b - a + 4) % 3)
+			count += b + 1
+		} else {
+			count += b * 3
+			count += 1 + ((a + b + 2) % 3)
+		}
 	}
 
 	fmt.Println(count)

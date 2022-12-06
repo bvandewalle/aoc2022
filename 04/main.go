@@ -22,10 +22,10 @@ func main() {
 		input = append(input, v)
 	}
 
-	part1And2(input)
+	parts(input)
 }
 
-func part1And2(input []string) {
+func parts(input []string) {
 	count1 := 0
 	count2 := 0
 
