@@ -43,7 +43,7 @@ Exit:
 					}
 				}
 			}
-			fmt.Println(i)
+			fmt.Println(i + 1)
 			return
 		}
 	}
