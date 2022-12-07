@@ -86,8 +86,6 @@ func parts(input []string) {
 		}
 	}
 
-	fmt.Println(root.totalSize)
-	fmt.Println(neededSpace)
 	fmt.Println(toDelete)
 
 }
