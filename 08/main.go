@@ -24,12 +24,6 @@ func main() {
 	parts(input)
 }
 
-type dir struct {
-	files     map[string]int
-	dir       map[string]*dir
-	totalSize int
-}
-
 func parts(input []string) {
 
 	trees := [][]int{}
@@ -68,7 +62,6 @@ func isVisible(trees [][]int, i int, j int) bool {
 			seen = false
 		}
 	}
-
 	if seen {
 		return true
 	}
@@ -79,7 +72,6 @@ func isVisible(trees [][]int, i int, j int) bool {
 			seen = false
 		}
 	}
-
 	if seen {
 		return true
 	}
@@ -90,7 +82,6 @@ func isVisible(trees [][]int, i int, j int) bool {
 			seen = false
 		}
 	}
-
 	if seen {
 		return true
 	}
@@ -105,37 +96,42 @@ func isVisible(trees [][]int, i int, j int) bool {
 }
 
 func score(trees [][]int, i int, j int) int {
-	seen1 := 0
+	score := 1
+	seen := 0
 	for k := j - 1; k >= 0; k-- {
-		seen1++
+		seen++
 		if trees[i][k] >= trees[i][j] {
 			break
 		}
 	}
+	score *= seen
 
-	seen2 := 0
+	seen = 0
 	for k := j + 1; k < len(trees[i]); k++ {
-		seen2++
+		seen++
 		if trees[i][k] >= trees[i][j] {
 			break
 		}
 	}
+	score *= seen
 
-	seen3 := 0
+	seen = 0
 	for k := i - 1; k >= 0; k-- {
-		seen3++
+		seen++
 		if trees[k][j] >= trees[i][j] {
 			break
 		}
 	}
+	score *= seen
 
-	seen4 := 0
+	seen = 0
 	for k := i + 1; k < len(trees); k++ {
-		seen4++
+		seen++
 		if trees[k][j] >= trees[i][j] {
 			break
 		}
 	}
+	score *= seen
 
-	return seen1 * seen2 * seen3 * seen4
+	return score
 }
