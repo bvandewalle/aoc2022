@@ -45,7 +45,7 @@ func parts(input []string) {
 			continue
 		}
 
-		if strings.Contains(iv, "$ cd") {
+		if strings.HasPrefix(iv, "$ cd") {
 			a := strings.Split(iv, " ")
 			current = current.dir[a[2]]
 			continue
