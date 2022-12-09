@@ -45,10 +45,9 @@ func parts(input []string, ropeLength int) {
 			rope[0] = rope[0].Add(moves[a[0]])
 
 			for j := 1; j < len(rope); j++ {
-				dx := rope[j-1].X - rope[j].X
-				dy := rope[j-1].Y - rope[j].Y
-				if (dx > 1) || (dx < -1) || (dy > 1) || (dy < -1) {
-					rope[j] = rope[j].Add(image.Point{sign(dx), sign(dy)})
+				diff := rope[j-1].Sub(rope[j])
+				if abs(diff.X) > 1 || abs(diff.Y) > 1 {
+					rope[j] = rope[j].Add(image.Point{sign(diff.X), sign(diff.Y)})
 				}
 			}
 
@@ -59,12 +58,16 @@ func parts(input []string, ropeLength int) {
 	fmt.Println(len(visited))
 }
 
-func sign(dx int) int {
-	if dx < 0 {
+func sign(x int) int {
+	if x < 0 {
 		return -1
 	}
-	if dx > 0 {
+	if x > 0 {
 		return 1
 	}
 	return 0
+}
+
+func abs(x int) int {
+	return sign(x) * x
 }
