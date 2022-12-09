@@ -35,12 +35,11 @@ func parts(input []string, ropeLength int) {
 	}
 
 	visited := map[image.Point]bool{}
+	moves := map[string]image.Point{"U": image.Point{0, 1}, "D": image.Point{0, -1}, "R": image.Point{1, 0}, "L": image.Point{-1, 0}}
 
 	for _, iv := range input {
 		a := strings.Split(iv, " ")
 		b, _ := strconv.Atoi(a[1])
-
-		moves := map[string]image.Point{"U": image.Point{0, 1}, "D": image.Point{0, -1}, "R": image.Point{1, 0}, "L": image.Point{-1, 0}}
 
 		for i := 0; i < b; i++ {
 			rope[0] = rope[0].Add(moves[a[0]])
