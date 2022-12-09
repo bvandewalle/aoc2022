@@ -42,10 +42,8 @@ func parts(input []string, ropeLength int) {
 
 		moves := map[string]image.Point{"U": image.Point{0, 1}, "D": image.Point{0, -1}, "R": image.Point{1, 0}, "L": image.Point{-1, 0}}
 
-		toadd := moves[a[0]]
-
 		for i := 0; i < b; i++ {
-			rope[0] = rope[0].Add(toadd)
+			rope[0] = rope[0].Add(moves[a[0]])
 
 			for j := 1; j < len(rope); j++ {
 				dx := rope[j-1].X - rope[j].X
