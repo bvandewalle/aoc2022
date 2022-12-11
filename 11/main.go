@@ -26,7 +26,7 @@ func parts(part2 bool) {
 		CommonMult *= iv
 	}
 
-	rounds := 10
+	rounds := 20
 	if part2 {
 		rounds = 10000
 	}
@@ -37,9 +37,9 @@ func parts(part2 bool) {
 				new := ops[i](jv)
 				if !part2 {
 					new = new / 3
-				} else {
-					new %= CommonMult
 				}
+				new %= CommonMult
+
 				if new%tests[i] == 0 {
 					items[results[i][0]] = append(items[results[i][0]], new)
 				} else {
