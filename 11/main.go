@@ -1,27 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"sort"
 )
 
 func main() {
-	file, _ := os.Open("input.txt")
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	scanner.Split(bufio.ScanLines)
-
-	var input []string
-
-	for scanner.Scan() {
-		v := scanner.
-			Text()
-		input = append(input, v)
-	}
-
 	parts(false)
 	parts(true)
 }
