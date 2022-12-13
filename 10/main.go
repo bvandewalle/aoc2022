@@ -18,8 +18,7 @@ func main() {
 	var input []string
 
 	for scanner.Scan() {
-		v := scanner.
-			Text()
+		v := scanner.Text()
 		input = append(input, v)
 	}
 

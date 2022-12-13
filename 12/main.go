@@ -16,8 +16,7 @@ func main() {
 	var input []string
 
 	for scanner.Scan() {
-		v := scanner.
-			Text()
+		v := scanner.Text()
 		input = append(input, v)
 	}
 
@@ -60,6 +59,7 @@ func parts(input []string, part2 bool) {
 	}
 
 	answer := 10000
+
 	for _, s := range possibleStarts {
 		recur(in, m, s, s, 0)
 		if m[destination] < answer {
