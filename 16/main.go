@@ -63,8 +63,8 @@ func parts(input []string, part2 bool) {
 	tunnels := []string{}
 	// Nifty  trick: Don't consider the destination with a valve of value zero.
 	// This reduces the search space by A LOT
-	for k := range pressure {
-		if pressure[k] != 0 {
+	for k, v := range pressure {
+		if v != 0 {
 			tunnels = append(tunnels, k)
 		}
 	}
