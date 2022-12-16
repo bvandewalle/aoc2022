@@ -60,6 +60,8 @@ func parts(input []string, part2 bool) {
 
 	graph := dijkstra.NewGraph()
 	tunnels := []string{}
+	// Nifty  trick: Don't consider the destination with a valve of value zero.
+	// This reduces the search space by A LOT
 	for k := range press {
 		if k != "AA" {
 			if press[k] != 0 {
@@ -75,12 +77,17 @@ func parts(input []string, part2 bool) {
 		}
 	}
 
+	// PreCalculate Dijkstra as a full matrix. To save time as those results will be used many times
 	matrix := calcReachabilityMatrix(graph, mappingInt)
 
 	if !part2 {
+		// Part1: Simply brute force on the problem space...
 		maxPressure := solveRecur(matrix, press, mappingInt, 0, 0, 0, "AA", tunnels, 30)
 		fmt.Println(maxPressure)
 	} else {
+		// Part2: Create all the possible combination of the destination and their opposite
+		// Then run both brute force in parallels
+		// Nifty trick: Only do the combination to half the length of the problem space as the opposite will take care of the mirroring solution
 		maxPressure := 0
 		for i := 3; i < len(tunnels)/2; i++ {
 			for v := range itertools.CombinationsStr(tunnels, i) {
