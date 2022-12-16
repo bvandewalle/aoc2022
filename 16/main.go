@@ -74,6 +74,7 @@ func parts(input []string, part2 bool) {
 	matrix := calcReachabilityMatrix(reachability, mappingInt)
 
 	maxPressure := 0
+	mu := sync.Mutex{}
 
 	if !part2 {
 		// Part1: Simply brute force on the problem space...
@@ -82,16 +83,20 @@ func parts(input []string, part2 bool) {
 		// Part2: Create all the possible combination of the destination and their opposite
 		// Then run both brute force in parallels
 		// Nifty trick: Only do the combination to half the length of the problem space as the opposite will take care of the mirroring solution
-		mu := sync.Mutex{}
+		// Running in parrallell to make it slightly faster
 		for i := 1; i < len(tunnels)/2; i++ {
 			for v := range itertools.CombinationsStr(tunnels, i) {
-				maxPressure2a := solveRecur(matrix, pressure, 0, 0, 0, "AA", v, 26)
-				maxPressure2b := solveRecur(matrix, pressure, 0, 0, 0, "AA", createOpposite(tunnels, v), 26)
-				mu.Lock()
-				if maxPressure2a+maxPressure2b > maxPressure {
-					maxPressure = maxPressure2a + maxPressure2b
-				}
-				mu.Unlock()
+				vcopy := []string{}
+				vcopy = append([]string(nil), v...)
+				go func() {
+					maxPressure2a := solveRecur(matrix, pressure, 0, 0, 0, "AA", vcopy, 26)
+					maxPressure2b := solveRecur(matrix, pressure, 0, 0, 0, "AA", createOpposite(tunnels, vcopy), 26)
+					mu.Lock()
+					if maxPressure2a+maxPressure2b > maxPressure {
+						maxPressure = maxPressure2a + maxPressure2b
+					}
+					mu.Unlock()
+				}()
 			}
 		}
 	}
