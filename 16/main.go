@@ -30,8 +30,10 @@ func main() {
 }
 
 func parts(input []string, part2 bool) {
-	gr := map[string][]string{}
-	press := map[string]int{}
+	reachability := map[string][]string{}
+	pressure := map[string]int{}
+
+	// Used for a mapping from string to an index for the dijkstra lib
 	mappingInt := map[string]int{}
 	count := 0
 
@@ -48,61 +50,53 @@ func parts(input []string, part2 bool) {
 		b[1] = strings.TrimPrefix(b[1], " ")
 		c := strings.Split(b[1], ", ")
 
-		gr[a[0]] = []string{}
+		reachability[a[0]] = []string{}
 		for _, v := range c {
-			gr[a[0]] = append(gr[a[0]], v)
+			reachability[a[0]] = append(reachability[a[0]], v)
 		}
-		press[a[0]] = rate
+		pressure[a[0]] = rate
 
 		mappingInt[a[0]] = count
 		count++
 	}
 
-	graph := dijkstra.NewGraph()
 	tunnels := []string{}
 	// Nifty  trick: Don't consider the destination with a valve of value zero.
 	// This reduces the search space by A LOT
-	for k := range press {
-		if k != "AA" {
-			if press[k] != 0 {
-				tunnels = append(tunnels, k)
-			}
-		}
-		graph.AddVertex(mappingInt[k])
-	}
-
-	for k, v := range gr {
-		for _, l := range v {
-			graph.AddArc(mappingInt[k], mappingInt[l], 1)
+	for k := range pressure {
+		if pressure[k] != 0 {
+			tunnels = append(tunnels, k)
 		}
 	}
 
 	// PreCalculate Dijkstra as a full matrix. To save time as those results will be used many times
-	matrix := calcReachabilityMatrix(graph, mappingInt)
+	matrix := calcReachabilityMatrix(reachability, mappingInt)
+
+	maxPressure := 0
 
 	if !part2 {
 		// Part1: Simply brute force on the problem space...
-		maxPressure := solveRecur(matrix, press, mappingInt, 0, 0, 0, "AA", tunnels, 30)
-		fmt.Println(maxPressure)
+		maxPressure = solveRecur(matrix, pressure, 0, 0, 0, "AA", tunnels, 30)
 	} else {
 		// Part2: Create all the possible combination of the destination and their opposite
 		// Then run both brute force in parallels
 		// Nifty trick: Only do the combination to half the length of the problem space as the opposite will take care of the mirroring solution
-		maxPressure := 0
-		for i := 3; i < len(tunnels)/2; i++ {
+		for i := 1; i < len(tunnels)/2; i++ {
 			for v := range itertools.CombinationsStr(tunnels, i) {
-				maxPressure2a := solveRecur(matrix, press, mappingInt, 0, 0, 0, "AA", v, 26)
-				maxPressure2b := solveRecur(matrix, press, mappingInt, 0, 0, 0, "AA", createOpposite(tunnels, v), 26)
+				maxPressure2a := solveRecur(matrix, pressure, 0, 0, 0, "AA", v, 26)
+				maxPressure2b := solveRecur(matrix, pressure, 0, 0, 0, "AA", createOpposite(tunnels, v), 26)
 				if maxPressure2a+maxPressure2b > maxPressure {
 					maxPressure = maxPressure2a + maxPressure2b
 				}
 			}
 		}
-		fmt.Println(maxPressure)
 	}
+
+	fmt.Println(maxPressure)
 }
 
-func solveRecur(matrix map[string]map[string]int, pressures map[string]int, mappingInt map[string]int, currentTime int, currentPressure int, currentFlow int, currentTunnel string, remaining []string, limit int) int {
+func solveRecur(matrix map[string]map[string]int, pressures map[string]int, currentTime int, currentPressure int, currentFlow int, currentTunnel string, remaining []string, limit int) int {
+	// The score if no other valves are being opened before the $limit time
 	nScore := currentPressure + (limit-currentTime)*currentFlow
 	max := nScore
 
@@ -112,7 +106,7 @@ func solveRecur(matrix map[string]map[string]int, pressures map[string]int, mapp
 			newTime := currentTime + distanceAndOpen
 			newPressure := currentPressure + distanceAndOpen*currentFlow
 			newFlow := currentFlow + pressures[v]
-			possibleScore := solveRecur(matrix, pressures, mappingInt, newTime, newPressure, newFlow, v, removeFromList(remaining, v), limit)
+			possibleScore := solveRecur(matrix, pressures, newTime, newPressure, newFlow, v, removeFromList(remaining, v), limit)
 			if possibleScore > max {
 				max = possibleScore
 			}
@@ -132,12 +126,24 @@ func removeFromList(in []string, v string) []string {
 	return new
 }
 
-func calcReachabilityMatrix(gr *dijkstra.Graph, mappingInt map[string]int) map[string]map[string]int {
+func calcReachabilityMatrix(reachability map[string][]string, mappingInt map[string]int) map[string]map[string]int {
+	graph := dijkstra.NewGraph()
+
+	for k := range reachability {
+		graph.AddVertex(mappingInt[k])
+	}
+
+	for k, v := range reachability {
+		for _, l := range v {
+			graph.AddArc(mappingInt[k], mappingInt[l], 1)
+		}
+	}
+
 	matrix := map[string]map[string]int{}
 	for k1, v1 := range mappingInt {
 		matrix[k1] = map[string]int{}
 		for k2, v2 := range mappingInt {
-			best, _ := gr.Shortest(v1, v2)
+			best, _ := graph.Shortest(v1, v2)
 			matrix[k1][k2] = int(best.Distance)
 		}
 	}
