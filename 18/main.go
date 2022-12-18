@@ -71,10 +71,7 @@ func recurFindIsland(cubes map[cube]bool) map[cube]bool {
 			for k := 0; k <= 21; k++ {
 				innerIsland := map[cube]bool{}
 				if !recur(cubes, visited, innerIsland, cube{i, j, k}) {
-					if len(innerIsland) > 0 {
-						//fmt.Println("ADDING", len(innerIsland), innerIsland)
-						addElems(toRemove, innerIsland)
-					}
+					addElems(toRemove, innerIsland)
 				}
 			}
 		}
@@ -83,6 +80,8 @@ func recurFindIsland(cubes map[cube]bool) map[cube]bool {
 	return toRemove
 }
 
+// return true if the island is not an inner island (it leaks ot the outside)
+// return false of the island is an inner.
 func recur(cubes map[cube]bool, visited map[cube]bool, innerIsland map[cube]bool, current cube) bool {
 	if _, e := innerIsland[current]; e {
 		return false
@@ -90,9 +89,14 @@ func recur(cubes map[cube]bool, visited map[cube]bool, innerIsland map[cube]bool
 	if _, e := cubes[current]; e {
 		return false
 	}
+
+	if _, e := visited[current]; e {
+		return true
+	}
 	if current.x < 0 || current.x > 21 || current.y < 0 || current.y > 21 || current.z < 0 || current.z > 21 {
 		return true
 	}
+
 	visited[current] = true
 	innerIsland[current] = true
 
