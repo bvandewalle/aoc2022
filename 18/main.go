@@ -45,32 +45,21 @@ func parts(input []string, part2 bool) {
 
 	n := [][]int{{1, 0, 0}, {-1, 0, 0}, {0, 1, 0}, {0, -1, 0}, {0, 0, 1}, {0, 0, -1}}
 
-	if !part2 {
-		faces := 0
-		for k := range cubes {
-			for _, v := range n {
-				if _, exist := cubes[cube{k.x + v[0], k.y + v[1], k.z + v[2]}]; !exist {
-					faces++
-				}
-			}
-		}
-		fmt.Println(faces)
-		return
+	if part2 {
+		toAdd := recurFindIsland(cubes)
+		addElems(cubes, toAdd)
 	}
 
-	toAdd := recurFindIsland(cubes)
-
-	addElems(cubes, toAdd)
-	faces3 := 0
+	faces := 0
 	for k := range cubes {
 		for _, v := range n {
 			if _, exist := cubes[cube{k.x + v[0], k.y + v[1], k.z + v[2]}]; !exist {
-				faces3++
+				faces++
 			}
 		}
 	}
 
-	fmt.Println(faces3)
+	fmt.Println(faces)
 }
 
 func recurFindIsland(cubes map[cube]bool) map[cube]bool {
