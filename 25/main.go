@@ -21,17 +21,10 @@ func main() {
 		input = append(input, v)
 	}
 
-	parts(input, false)
-	parts(input, true)
+	parts(input)
 }
 
-type cube struct {
-	x int
-	y int
-	z int
-}
-
-func parts(input []string, part2 bool) {
+func parts(input []string) {
 
 	snafu := []int{}
 
@@ -52,8 +45,6 @@ func parts(input []string, part2 bool) {
 		}
 	}
 
-	fmt.Println(snafu)
-
 	for i := range snafu {
 		v := snafu[i]
 		carry := 0
@@ -65,14 +56,11 @@ func parts(input []string, part2 bool) {
 			carry -= 1
 			v += 5
 		}
-
 		snafu[i] = v
 		if carry != 0 {
 			snafu[i+1] += carry
 		}
 	}
-
-	fmt.Println(snafu)
 
 	for i := len(snafu) - 1; i >= 0; i-- {
 		v := snafu[i]
